@@ -1,4 +1,4 @@
-# Nginx + Vite + Tomcat frontweb
+# WebServer(Nginx + Vite) + WebApplicationServer(Tomcat)
 
 ## Server responsibilities
 
@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | `nginx-staticweb` | Proxies `/` to Vite and public `/api/*` to Front WAS | Serves React `dist` and proxies public `/api/*` to Front WAS |
 | `vite-devserver` | React + TypeScript + Vite development server | Not started |
-| `tomcat-frontweb` | Spring REST API / BFF | Spring REST API / BFF |
+| `tomcat-frontWas` | Spring REST API / BFF | Spring REST API / BFF |
 
 ## URL contract
 
