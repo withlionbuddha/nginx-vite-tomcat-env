@@ -1,0 +1,16 @@
+FROM node:24.20.0-bookworm AS build
+
+WORKDIR /workspace/web-ui
+
+COPY web-ui/package.json web-ui/package-lock.json ./
+RUN npm ci
+
+COPY web-ui/ ./
+RUN npm run build
+
+FROM nginx:1.30.4-alpine3.24
+
+COPY --from=build /workspace/web-ui/dist/ /usr/share/nginx/html/
+COPY nginx-vite-tomcat-compose/nginx/default.prod.conf /etc/nginx/templates/default.conf.template
+
+EXPOSE 80

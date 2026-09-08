@@ -1,0 +1,16 @@
+{
+  "name": "nginx-vite-tomcat-frontweb",
+  "image": "node:24.20.0-bookworm",
+  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind",
+  "workspaceFolder": "/workspace/web-ui",
+  "postCreateCommand": "sh /workspace/nginx-vite-tomcat-compose/scripts/init-web-ui.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
+}

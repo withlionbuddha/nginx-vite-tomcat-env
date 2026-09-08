@@ -1,0 +1,68 @@
+name: front-${APP_NAME}
+
+services:
+  nginx-web:
+    image: nginx:1.30.4-alpine3.24
+    container_name: nginx-web-${APP_NAME}
+    ports:
+      - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
+    volumes:
+      - ./nginx/default.dev.conf:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      - vite-devserver
+      - tomcat-frontend
+    restart: unless-stopped
+    networks:
+      - web-frontwas-network
+
+  vite-devserver:
+    build:
+      context: ..
+      dockerfile: ./nginx-vite-tomcat-env/vite-devserver/Dockerfile.dev
+    container_name: vite-devserver-${APP_NAME}
+    expose:
+      - "8183"
+    volumes:
+      - ../web-ui:/app
+      - vite_node_modules:/app/node_modules
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    networks:
+      - web-frontwas-network
+
+  web-ui-init:
+    image: node:24.20.0-bookworm
+    container_name: web-ui-init-${APP_NAME}
+    profiles:
+      - init
+    working_dir: /workspace
+    volumes:
+      - ..:/workspace
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        if [ ! -f web-ui/package.json ]; then
+          npm create vite@latest web-ui -- --template react-ts
+        fi
+        cd web-ui
+        npm install
+
+  tomcat-frontend:
+    build:
+      context: ..
+      dockerfile: ./nginx-vite-tomcat-env/tomcat-frontend/Dockerfile
+    image: tomcat-frontend:${APP_NAME}
+    container_name: tomcat-frontend-${APP_NAME}
+    expose:
+      - "8080"
+    restart: unless-stopped
+    networks:
+      - web-frontwas-network
+volumes:
+  vite_node_modules:
+
+networks:
+ web-frontwas-network:
+    name: web-frontwas-network-${APP_NAME}
+    driver: bridge

@@ -1,0 +1,21 @@
+name: frontweb-${APP_NAME}
+
+services:
+  tomcat-frontweb:
+    build:
+      context: ..
+      dockerfile: ./nginx-vite-tomcat-compose/tomcat-frontweb/Dockerfile
+    image: tomcat-frontweb:${APP_NAME}
+    container_name: tomcat-frontweb-${APP_NAME}
+    ports:
+      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PORT:-18080}:8080"
+    expose:
+      - "8080"
+    restart: unless-stopped
+    networks:
+      - frontweb-network
+
+networks:
+  frontweb-network:
+    name: frontweb-network-${APP_NAME}
+    driver: bridge
