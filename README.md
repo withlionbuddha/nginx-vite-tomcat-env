@@ -77,13 +77,7 @@ docker compose -f docker-compose.staticweb.dev.yml logs -f vite-devserver
 
 기본 접속 주소는 `http://localhost:8080`입니다. 정적 웹 개발용 포트를 변경할 때는 `.env`에 `STATICWEB_PORT`를 지정합니다. 종료는 `docker compose -f docker-compose.staticweb.dev.yml down`입니다.
 
-초기화만 수행하려면 Vite를 중지한 상태에서 실행합니다. 일반적인 Dev Container 시작에서는 이 명령을 따로 실행하지 않아도 됩니다.
-
-```sh
-docker compose -f docker-compose.staticweb.dev.yml --profile init run --rm --build web-ui-init
-```
-
-`web-ui-init`도 Vite와 동일한 소스 경로와 의존성 볼륨을 사용합니다. `package.json`이 있으면 기존 프로젝트를 사용하고, 잠금 파일이 있으면 `npm ci`, 없으면 `npm install`을 실행합니다. 빈 작업 폴더는 React + TypeScript 템플릿으로 생성합니다. `package.json` 없이 다른 소스가 있는 폴더는 덮어쓰지 않고 중단합니다.
+프로젝트 초기화와 의존성 설치는 `vite-devserver`가 시작할 때 자동으로 처리합니다. `package.json`이 있으면 기존 프로젝트를 사용하고, 잠금 파일이 있으면 `npm ci`, 없으면 `npm install`을 실행합니다. 빈 작업 폴더는 React + TypeScript 템플릿으로 생성합니다. `package.json` 없이 다른 소스가 있는 폴더는 덮어쓰지 않고 중단합니다.
 
 ## 4. 서버별 역할
 

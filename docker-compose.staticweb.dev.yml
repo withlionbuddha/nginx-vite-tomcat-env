@@ -36,25 +36,6 @@ services:
     networks:
       - frontweb-network
 
-  web-ui-init:
-    build:
-      context: .
-      dockerfile: vite-devserver/Dockerfile.dev
-    container_name: web-ui-init-${APP_NAME}
-    profiles:
-      - init
-    working_dir: /workspace/web-ui
-    environment:
-      WEB_UI_PATH: /workspace/web-ui
-    volumes:
-      - type: bind
-        source: "${WEB_UI_HOST_PATH:-../web-ui}"
-        target: /workspace/web-ui
-        bind:
-          create_host_path: false
-      - vite_node_modules:/workspace/web-ui/node_modules
-    command: ["sh", "/opt/dev/scripts/init-web-ui.sh"]
-
 volumes:
   vite_node_modules:
 
