@@ -17,36 +17,25 @@ services:
 
   vite-devserver:
     build:
-      context: ..
-      dockerfile: ./nginx-vite-tomcat-env/vite-devserver/Dockerfile.dev
+      context: .
+      dockerfile: vite-devserver/Dockerfile.dev
     container_name: vite-devserver-${APP_NAME}
+    working_dir: /workspace/web-ui
+    init: true
     expose:
       - "8183"
     volumes:
-      - ../web-ui:/app
-      - vite_node_modules:/app/node_modules
+      - type: bind
+        source: "${WEB_UI_HOST_PATH:-../web-ui}"
+        target: /workspace/web-ui
+        bind:
+          create_host_path: false
+      - vite_node_modules:/workspace/web-ui/node_modules
     environment:
-      CHOKIDAR_USEPOLLING: "true"
+      WEB_UI_PATH: /workspace/web-ui
+      CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     networks:
       - web-frontwas-network
-
-  web-ui-init:
-    image: node:24.20.0-bookworm
-    container_name: web-ui-init-${APP_NAME}
-    profiles:
-      - init
-    working_dir: /workspace
-    volumes:
-      - ..:/workspace
-    command:
-      - /bin/sh
-      - -ec
-      - |
-        if [ ! -f web-ui/package.json ]; then
-          npm create vite@latest web-ui -- --template react-ts
-        fi
-        cd web-ui
-        npm install
 
   tomcat-frontend:
     build:
