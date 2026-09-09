@@ -59,7 +59,7 @@ yarn dev --host 0.0.0.0 --port 8183
 > | Default URL | `http://localhost:8184` |
 > | Docker 내부 접근 | `http://ref-vite-devserver:8184` |
 > | 외부/호스트 접근 | 개발 환경에서 허용. `http://localhost:8184` |
-> | Host source | `${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}` |
+> | Host source | `${REFERENCE_UI_SOURCE_PATH:-../ref-react-web-ui/bulletproof-react}` |
 > | `node_modules` | Docker named volume `ref_vite_node_modules` |
 >
 > Reference UI 소스가 있으면 실제 애플리케이션을 실행하고, 없으면 fallback Vite를 `8184` 포트에서 실행합니다.
@@ -182,7 +182,7 @@ docker compose -f docker-compose.dev.no-reference.yml up --build -d
 > | `WEB_UI_SOURCE_PATH` | `../react-web-ui` | Dev React 소스 경로 |
 > | `VITE_BIND_ADDRESS` | `127.0.0.1` | Dev Vite 호스트 바인딩 주소 |
 > | `VITE_PORT` | `8183` | Dev Vite 호스트 포트 |
-> | `REFERENCE_UI_SOURCE_PATH` | `../reactex/bulletproof-react` | Reference UI 소스 경로 |
+> | `REFERENCE_UI_SOURCE_PATH` | `../ref-react-web-ui/bulletproof-react` | Reference UI 소스 경로 |
 > | `REFERENCE_UI_BIND_ADDRESS` | `127.0.0.1` | Reference Vite 바인딩 주소 |
 > | `REFERENCE_UI_PORT` | `8184` | Reference Vite 호스트 포트 |
 > | `VITE_USE_POLLING` | `true` | Windows bind mount 파일 변경 감지 |
@@ -220,7 +220,7 @@ F:\project.rag
 ├─ nginx-vite-tomcat-env
 ├─ react-web-ui                 # 선택 사항
 ├─ frontend                     # 선택 사항
-└─ reactex
+└─ ref-react-web-ui
    └─ bulletproof-react         # 선택 사항
 ```
 
@@ -237,7 +237,7 @@ WEB_UI_SOURCE_PATH=F:/project.rag/react-web-ui
 VITE_BIND_ADDRESS=127.0.0.1
 VITE_PORT=8183
 
-REFERENCE_UI_SOURCE_PATH=F:/project.rag/reactex/bulletproof-react
+REFERENCE_UI_SOURCE_PATH=F:/project.rag/ref-react-web-ui/bulletproof-react
 REFERENCE_UI_BIND_ADDRESS=127.0.0.1
 REFERENCE_UI_PORT=8184
 
