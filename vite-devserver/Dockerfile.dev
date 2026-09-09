@@ -1,5 +1,5 @@
 FROM node:24.20.0-bookworm
 
-WORKDIR /workspace/web-ui
+WORKDIR /workspace/react-web-ui
 
 EXPOSE 8183
