@@ -26,11 +26,11 @@
 | Base image | `node:24.20.0-bookworm` |
 | Node.js | `24.20.0` |
 | Package manager | Yarn 1.x |
-| Working directory | `/workspace/web-ui` |
+| Working directory | `/workspace/react-web-ui` |
 | Container port | `8183` |
 | Default host port | `8183` |
 | Default URL | `http://localhost:8183` |
-| Host source | `${WEB_UI_HOST_PATH:-../web-ui}` |
+| Host source | `${WEB_UI_HOST_PATH:-../react-web-ui}` |
 | `node_modules` | Docker named volume `vite_node_modules` |
 
 컨테이너 시작 시 `node_modules/.bin/vite`의 존재 여부를 확인합니다. Vite가 설치되어 있지 않으면 컨테이너 내부에서 `yarn install`을 실행한 뒤 다음 명령으로 개발 서버를 시작합니다.
@@ -137,7 +137,7 @@ tomcat-frontend
 | `APP_NAME` | `muilti-domain-rag` | Compose 및 컨테이너 식별자 |
 | `NGINX_BIND_ADDRESS` | `127.0.0.1` | Nginx 호스트 바인딩 주소 |
 | `NGINX_PORT` | `8080` | Nginx 호스트 포트 |
-| `WEB_UI_HOST_PATH` | `../web-ui` | Main React 소스 경로 |
+| `WEB_UI_HOST_PATH` | `../react-web-ui` | Main React 소스 경로 |
 | `VITE_BIND_ADDRESS` | `127.0.0.1` | Main Vite 호스트 바인딩 주소 |
 | `VITE_PORT` | `8183` | Main Vite 호스트 포트 |
 | `REFERENCE_UI_HOST_PATH` | `../reactex/bulletproof-react` | Reference UI 소스 경로 |
@@ -186,7 +186,7 @@ Docker Desktop은 Linux container 모드로 실행되어 있어야 합니다.
 ```text
 F:\project.rag
 ├─ nginx-vite-tomcat-env
-├─ web-ui
+├─ react-web-ui
 ├─ frontend                     # 선택 사항
 └─ reactex
    └─ bulletproof-react         # Reference 구성 사용 시 필요
@@ -207,7 +207,7 @@ Copy-Item .env.example .env
 Windows 예시:
 
 ```dotenv
-WEB_UI_HOST_PATH=F:/project.rag/web-ui
+WEB_UI_HOST_PATH=F:/project.rag/react-web-ui
 VITE_BIND_ADDRESS=127.0.0.1
 VITE_PORT=8183
 
