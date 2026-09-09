@@ -2,30 +2,18 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $composeRoot = Split-Path -Parent $PSScriptRoot
-$projectRoot = Split-Path -Parent $composeRoot
-$webUiPath = Join-Path $projectRoot "web-ui"
+$composeFile = Join-Path $composeRoot "docker-compose.staticweb.dev.yml"
+$envFile = Join-Path $composeRoot ".env"
 
-if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
-    throw "npm을 찾을 수 없습니다. Node.js LTS를 설치한 뒤 다시 실행하십시오."
+if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+    throw "Docker CLI was not found. Install and start Docker Desktop."
 }
 
-if (-not (Test-Path (Join-Path $webUiPath "package.json"))) {
-    Push-Location $projectRoot
-    try {
-        $env:npm_config_yes = "true"
-        npm create vite@latest web-ui -- --template react-ts --eslint --no-interactive
-    }
-    finally {
-        Pop-Location
-    }
+# Initialization runs inside the normal Vite container at startup.
+& docker compose --project-directory $composeRoot --env-file $envFile -f $composeFile up --build -d vite-devserver
+if ($LASTEXITCODE -ne 0) {
+    throw "The Vite container could not be started. Check Docker Desktop and Compose logs."
 }
 
-Push-Location $webUiPath
-try {
-    npm install
-}
-finally {
-    Pop-Location
-}
-
-Write-Host "web-ui 초기화가 완료되었습니다: $webUiPath"
+Write-Host "Vite is starting. Initialization and npm installation run inside the container."
+Write-Host "Follow progress with: docker compose -f docker-compose.staticweb.dev.yml logs -f vite-devserver"
