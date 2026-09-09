@@ -2,12 +2,12 @@ name: integrated-${APP_NAME}-dev
 
 services:
   nginx-staticweb:
-    image: nginx:1.30.4-alpine3.24
+    image: "${NGINX_IMAGE}"
     container_name: nginx-staticweb-${APP_NAME}
     ports:
-      - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
+      - "${NGINX_BIND_ADDRESS}:${NGINX_PORT}:${NGINX_CONTAINER_PORT}"
     volumes:
-      - ./nginx/default.dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - "${NGINX_DEV_CONFIG}:/etc/nginx/conf.d/default.conf:ro"
     depends_on:
       - vite-devserver
       - tomcat-frontend
@@ -18,81 +18,81 @@ services:
   vite-devserver:
     build:
       context: .
-      dockerfile: vite/Dockerfile.dev
+      dockerfile: "${VITE_DOCKERFILE}"
     container_name: vite-devserver-${APP_NAME}
-    working_dir: /workspace/react-web-ui
+    working_dir: "${WEB_UI_CONTAINER_PATH}"
     init: true
     ports:
-      - "${VITE_BIND_ADDRESS:-127.0.0.1}:${VITE_PORT:-8183}:8183"
+      - "${VITE_BIND_ADDRESS}:${VITE_PORT}:${VITE_CONTAINER_PORT}"
     volumes:
       - type: bind
-        source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
-        target: /workspace/react-web-ui
+        source: "${WEB_UI_SOURCE_PATH}"
+        target: "${WEB_UI_CONTAINER_PATH}"
         bind:
           create_host_path: true
       - type: bind
-        source: "${REFERENCE_UI_SOURCE_PATH:-../ref-react-web-ui/bulletproof-react}"
-        target: /workspace/reference-ui
+        source: "${REFERENCE_UI_SOURCE_PATH}"
+        target: "${REFERENCE_UI_CONTAINER_PATH}"
         bind:
           create_host_path: true
       - type: bind
-        source: "${FRONTEND_SOURCE_PATH:-../frontend}"
-        target: /workspace/frontend
+        source: "${FRONTEND_SOURCE_PATH}"
+        target: "${FRONTEND_CONTAINER_PATH}"
         bind:
           create_host_path: true
-      - vite_node_modules:/workspace/react-web-ui/node_modules
+      - "vite_node_modules:${WEB_UI_CONTAINER_PATH}/node_modules"
     environment:
-      WEB_UI_PATH: /workspace/react-web-ui
-      REFERENCE_UI_PATH: /workspace/reference-ui
-      FRONTEND_PATH: /workspace/frontend
-      CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
+      WEB_UI_PATH: "${WEB_UI_CONTAINER_PATH}"
+      REFERENCE_UI_PATH: "${REFERENCE_UI_CONTAINER_PATH}"
+      FRONTEND_PATH: "${FRONTEND_CONTAINER_PATH}"
+      CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING}"
     command: >
       sh -c "if [ ! -f package.json ]; then
-               echo 'Main React source not found; starting fallback Vite server on port 8183.';
-               exec /opt/vite-fallback/node_modules/.bin/vite /opt/vite-fallback --host 0.0.0.0 --port 8183;
+               echo 'Dev React source not found; starting fallback Vite server.';
+               exec /opt/vite-fallback/node_modules/.bin/vite /opt/vite-fallback --host 0.0.0.0 --port ${VITE_CONTAINER_PORT};
              fi;
              if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
-             exec yarn dev --host 0.0.0.0 --port 8183"
+             exec yarn dev --host 0.0.0.0 --port ${VITE_CONTAINER_PORT}"
     networks:
       - web-network
 
   ref-vite-devserver:
     build:
       context: .
-      dockerfile: vite/Dockerfile.dev
+      dockerfile: "${VITE_DOCKERFILE}"
     container_name: ref-vite-devserver-${APP_NAME}
-    working_dir: /workspace/reference-ui/apps/react-vite
+    working_dir: "${REFERENCE_UI_WORKING_DIR}"
     init: true
     ports:
-      - "${REFERENCE_UI_BIND_ADDRESS:-127.0.0.1}:${REFERENCE_UI_PORT:-8184}:8184"
+      - "${REFERENCE_UI_BIND_ADDRESS}:${REFERENCE_UI_PORT}:${REFERENCE_UI_CONTAINER_PORT}"
     volumes:
       - type: bind
-        source: "${REFERENCE_UI_SOURCE_PATH:-../ref-react-web-ui/bulletproof-react}"
-        target: /workspace/reference-ui
+        source: "${REFERENCE_UI_SOURCE_PATH}"
+        target: "${REFERENCE_UI_CONTAINER_PATH}"
         bind:
           create_host_path: true
-      - ref_vite_node_modules:/workspace/reference-ui/apps/react-vite/node_modules
+      - "ref_vite_node_modules:${REFERENCE_UI_WORKING_DIR}/node_modules"
     environment:
-      REFERENCE_UI_PATH: /workspace/reference-ui
-      CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
+      REFERENCE_UI_PATH: "${REFERENCE_UI_CONTAINER_PATH}"
+      CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING}"
     command: >
       sh -c "if [ ! -f package.json ]; then
-               echo 'Reference React source not found; starting fallback Vite server on port 8184.';
-               exec /opt/vite-fallback/node_modules/.bin/vite /opt/vite-fallback --host 0.0.0.0 --port 8184;
+               echo 'Reference React source not found; starting fallback Vite server.';
+               exec /opt/vite-fallback/node_modules/.bin/vite /opt/vite-fallback --host 0.0.0.0 --port ${REFERENCE_UI_CONTAINER_PORT};
              fi;
              if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
-             exec yarn dev --host 0.0.0.0 --port 8184"
+             exec yarn dev --host 0.0.0.0 --port ${REFERENCE_UI_CONTAINER_PORT}"
     networks:
       - web-network
 
   tomcat-frontend:
     build:
       context: .
-      dockerfile: tomcat/Dockerfile
-    image: tomcat-frontend:${APP_NAME}
+      dockerfile: "${TOMCAT_DOCKERFILE}"
+    image: "${TOMCAT_IMAGE}"
     container_name: tomcat-frontend-${APP_NAME}
     ports:
-      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PORT:-18080}:8080"
+      - "${FRONTWAS_BIND_ADDRESS}:${FRONTWAS_PORT}:${FRONTWAS_CONTAINER_PORT}"
     restart: unless-stopped
     networks:
       - web-network
