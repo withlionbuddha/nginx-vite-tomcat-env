@@ -25,7 +25,7 @@ services:
       - "8183"
     volumes:
       - type: bind
-        source: "${WEB_UI_HOST_PATH:-../react-web-ui}"
+        source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
         target: /workspace/react-web-ui
         bind:
           create_host_path: false
