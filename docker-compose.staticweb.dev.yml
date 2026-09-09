@@ -17,7 +17,7 @@ services:
   vite-devserver:
     build:
       context: .
-      dockerfile: vite-devserver/Dockerfile.dev
+      dockerfile: vite/Dockerfile.dev
     container_name: vite-devserver-${APP_NAME}
     working_dir: /workspace/react-web-ui
     init: true
