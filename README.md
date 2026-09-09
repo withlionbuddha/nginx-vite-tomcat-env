@@ -30,7 +30,7 @@
 | Container port | `8183` |
 | Default host port | `8183` |
 | Default URL | `http://localhost:8183` |
-| Host source | `${WEB_UI_HOST_PATH:-../react-web-ui}` |
+| Host source | `${WEB_UI_SOURCE_PATH:-../react-web-ui}` |
 | `node_modules` | Docker named volume `vite_node_modules` |
 
 컨테이너 시작 시 `node_modules/.bin/vite`의 존재 여부를 확인합니다. Vite가 설치되어 있지 않으면 컨테이너 내부에서 `yarn install`을 실행한 뒤 다음 명령으로 개발 서버를 시작합니다.
@@ -51,12 +51,12 @@ Windows 호스트의 파일 변경 감지를 위해 기본적으로 `CHOKIDAR_US
 | Container port | `8184` |
 | Default host port | `8184` |
 | Default URL | `http://localhost:8184` |
-| Host source | `${REFERENCE_UI_HOST_PATH:-../reactex/bulletproof-react}` |
+| Host source | `${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}` |
 | `node_modules` | Docker named volume `ref_vite_node_modules` |
 
 Reference UI는 Nginx를 거치지 않고 호스트의 `8184` 포트에서 직접 접속합니다. 컨테이너 시작 시 Vite 실행 파일이 없으면 `yarn install`을 수행한 후 Vite를 실행합니다.
 
-Reference UI가 필요하지 않은 경우 `docker-compose.dev.no-reference.yml`을 사용합니다. 이 Compose 파일에는 `ref-vite-devserver`, `REFERENCE_UI_HOST_PATH`, `REFERENCE_UI_PORT`, `ref_vite_node_modules`가 포함되지 않습니다.
+Reference UI가 필요하지 않은 경우 `docker-compose.dev.no-reference.yml`을 사용합니다. 이 Compose 파일에는 `ref-vite-devserver`, `REFERENCE_UI_SOURCE_PATH`, `REFERENCE_UI_PORT`, `ref_vite_node_modules`가 포함되지 않습니다.
 
 ### Tomcat Front WAS
 
@@ -73,7 +73,7 @@ Reference UI가 필요하지 않은 경우 `docker-compose.dev.no-reference.yml`
 
 Tomcat 컨테이너는 Maven 프로젝트나 WAR가 없어도 정상 기동됩니다. 공식 Tomcat 이미지의 `webapps.dist`를 `webapps`로 복원하므로 애플리케이션을 배포하기 전에는 `http://localhost:18080`에서 Apache Tomcat 기본 Welcome 화면을 확인할 수 있습니다.
 
-Maven 빌드와 WAR 배포는 Tomcat 서버 기동과 분리합니다. 따라서 `FRONTWAS_HOST_PATH`에 소스나 `pom.xml`이 없더라도 Tomcat 서버 자체의 Docker build 및 실행에는 영향을 주지 않습니다.
+Maven 빌드와 WAR 배포는 Tomcat 서버 기동과 분리합니다. 따라서 `FRONTEND_SOURCE_PATH`에 소스나 `pom.xml`이 없더라도 Tomcat 서버 자체의 Docker build 및 실행에는 영향을 주지 않습니다.
 
 ## 개발 서버 연결 구조
 
@@ -126,7 +126,7 @@ vite-devserver
 tomcat-frontend
 ```
 
-이 구성은 `REFERENCE_UI_HOST_PATH`를 전혀 참조하지 않으므로 `../reactex/bulletproof-react` 디렉터리가 없어도 Compose를 실행할 수 있습니다.
+이 구성은 `REFERENCE_UI_SOURCE_PATH`를 전혀 참조하지 않으므로 `../reactex/bulletproof-react` 디렉터리가 없어도 Compose를 실행할 수 있습니다.
 
 ## 환경 변수
 
@@ -137,16 +137,16 @@ tomcat-frontend
 | `APP_NAME` | `muilti-domain-rag` | Compose 및 컨테이너 식별자 |
 | `NGINX_BIND_ADDRESS` | `127.0.0.1` | Nginx 호스트 바인딩 주소 |
 | `NGINX_PORT` | `8080` | Nginx 호스트 포트 |
-| `WEB_UI_HOST_PATH` | `../react-web-ui` | Main React 소스 경로 |
+| `WEB_UI_SOURCE_PATH` | `../react-web-ui` | Main React 소스 경로 |
 | `VITE_BIND_ADDRESS` | `127.0.0.1` | Main Vite 호스트 바인딩 주소 |
 | `VITE_PORT` | `8183` | Main Vite 호스트 포트 |
-| `REFERENCE_UI_HOST_PATH` | `../reactex/bulletproof-react` | Reference UI 소스 경로 |
+| `REFERENCE_UI_SOURCE_PATH` | `../reactex/bulletproof-react` | Reference UI 소스 경로 |
 | `REFERENCE_UI_BIND_ADDRESS` | `127.0.0.1` | Reference Vite 바인딩 주소 |
 | `REFERENCE_UI_PORT` | `8184` | Reference Vite 호스트 포트 |
 | `VITE_USE_POLLING` | `true` | Windows bind mount 파일 변경 감지 |
 | `FRONTWAS_BIND_ADDRESS` | `127.0.0.1` | Tomcat 호스트 바인딩 주소 |
 | `FRONTWAS_PORT` | `18080` | Tomcat 호스트 포트 |
-| `FRONTWAS_HOST_PATH` | `../frontend` | 별도 Maven/WAR 빌드 절차에서 사용할 선택적 소스 경로 |
+| `FRONTEND_SOURCE_PATH` | `../frontend` | 별도 Maven/WAR 빌드 절차에서 사용할 선택적 소스 경로 |
 
 `docker-compose.dev.no-reference.yml`을 사용할 때는 Reference UI 관련 환경 변수가 필요하지 않습니다.
 
@@ -192,7 +192,7 @@ F:\project.rag
    └─ bulletproof-react         # Reference 구성 사용 시 필요
 ```
 
-Main Vite를 실행하려면 `WEB_UI_HOST_PATH`가 가리키는 디렉터리가 실제로 존재해야 합니다. Reference 포함 Compose를 사용할 경우 `REFERENCE_UI_HOST_PATH`도 존재해야 합니다.
+Main Vite를 실행하려면 `WEB_UI_SOURCE_PATH`가 가리키는 디렉터리가 실제로 존재해야 합니다. Reference 포함 Compose를 사용할 경우 `REFERENCE_UI_SOURCE_PATH`도 존재해야 합니다.
 
 Tomcat 자체를 실행할 때는 `frontend` 소스와 `pom.xml`이 필요하지 않습니다.
 
@@ -207,22 +207,23 @@ Copy-Item .env.example .env
 Windows 예시:
 
 ```dotenv
-WEB_UI_HOST_PATH=F:/project.rag/react-web-ui
+WEB_UI_SOURCE_PATH=F:/project.rag/react-web-ui
 VITE_BIND_ADDRESS=127.0.0.1
 VITE_PORT=8183
 
-REFERENCE_UI_HOST_PATH=F:/project.rag/reactex/bulletproof-react
+REFERENCE_UI_SOURCE_PATH=F:/project.rag/reactex/bulletproof-react
 REFERENCE_UI_BIND_ADDRESS=127.0.0.1
 REFERENCE_UI_PORT=8184
 
-NGINX_BIND_ADDRESS=127.0.0.1
-NGINX_PORT=8080
-
+FRONTEND_SOURCE_PATH=F:/project.rag/frontend
 FRONTWAS_BIND_ADDRESS=127.0.0.1
 FRONTWAS_PORT=18080
+
+NGINX_BIND_ADDRESS=127.0.0.1
+NGINX_PORT=8080
 ```
 
-Reference 없는 Compose를 사용할 경우 `REFERENCE_UI_HOST_PATH`를 준비할 필요가 없습니다.
+Reference 없는 Compose를 사용할 경우 `REFERENCE_UI_SOURCE_PATH`를 준비할 필요가 없습니다.
 
 ## Docker Build 및 실행 과정
 
