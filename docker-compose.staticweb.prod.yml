@@ -1,19 +1,22 @@
-name: frontweb-${APP_NAME}
+name: staticweb-${APP_NAME}-prod
 
 services:
   nginx-staticweb:
     build:
-      context: ..
-      dockerfile: ./nginx-vite-tomcat-compose/nginx/Dockerfile.prod
-    image: nginx-staticweb:${APP_NAME}
+      context: .
+      dockerfile: nginx/Dockerfile.prod
+      additional_contexts:
+        web_ui_source: "${WEB_UI_HOST_PATH:-../web-ui}"
+      args:
+        NGINX_CONFIG: default.staticweb.prod.conf
+    image: nginx-staticweb:${APP_NAME}-staticweb-prod
     container_name: nginx-staticweb-${APP_NAME}
     ports:
-      - "${STATICWEB_BIND_ADDRESS:-127.0.0.1}:${STATICWEB_PORT:-8080}:80"
+      - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
     restart: unless-stopped
     networks:
-      - frontweb-network
+      - web-network
 
 networks:
-  frontweb-network:
-    name: frontweb-network-${APP_NAME}
+  web-network:
     driver: bridge

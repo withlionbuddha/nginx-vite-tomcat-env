@@ -1,16 +1,22 @@
+# syntax=docker/dockerfile:1
 FROM node:24.20.0-bookworm AS build
 
 WORKDIR /workspace/web-ui
 
-COPY web-ui/package.json web-ui/package-lock.json ./
+COPY --from=web_ui_source package.json package-lock.json ./
 RUN npm ci
 
-COPY web-ui/ ./
+# Copy source without overwriting Linux dependencies with host node_modules.
+RUN --mount=type=bind,from=web_ui_source,target=/source \
+    tar -C /source --exclude=node_modules --exclude=dist --exclude=.git -cf /tmp/web-ui-source.tar . \
+    && tar -C /workspace/web-ui -xf /tmp/web-ui-source.tar \
+    && rm /tmp/web-ui-source.tar
 RUN npm run build
 
 FROM nginx:1.30.4-alpine3.24
 
+ARG NGINX_CONFIG=default.prod.conf
 COPY --from=build /workspace/web-ui/dist/ /usr/share/nginx/html/
-COPY nginx-vite-tomcat-compose/nginx/default.prod.conf /etc/nginx/templates/default.conf.template
+COPY nginx/${NGINX_CONFIG} /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
