@@ -31,7 +31,7 @@ services:
         bind:
           create_host_path: true
       - type: bind
-        source: "${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}"
+        source: "${REFERENCE_UI_SOURCE_PATH:-../ref-react-web-ui/bulletproof-react}"
         target: /workspace/reference-ui
         bind:
           create_host_path: true
@@ -67,7 +67,7 @@ services:
       - "${REFERENCE_UI_BIND_ADDRESS:-127.0.0.1}:${REFERENCE_UI_PORT:-8184}:8184"
     volumes:
       - type: bind
-        source: "${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}"
+        source: "${REFERENCE_UI_SOURCE_PATH:-../ref-react-web-ui/bulletproof-react}"
         target: /workspace/reference-ui
         bind:
           create_host_path: true
