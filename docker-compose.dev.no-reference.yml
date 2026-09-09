@@ -29,19 +29,23 @@ services:
         source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
         target: /workspace/react-web-ui
         bind:
-          create_host_path: false
+          create_host_path: true
       - type: bind
         source: "${FRONTEND_SOURCE_PATH:-../frontend}"
         target: /workspace/frontend
         bind:
-          create_host_path: false
+          create_host_path: true
       - vite_node_modules:/workspace/react-web-ui/node_modules
     environment:
       WEB_UI_PATH: /workspace/react-web-ui
       FRONTEND_PATH: /workspace/frontend
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     command: >
-      sh -c "if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
+      sh -c "if [ ! -f package.json ]; then
+               echo 'Main React source not found; keeping Vite container available without starting Vite.';
+               exec tail -f /dev/null;
+             fi;
+             if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
              exec yarn dev --host 0.0.0.0 --port 8183"
     networks:
       - web-network
