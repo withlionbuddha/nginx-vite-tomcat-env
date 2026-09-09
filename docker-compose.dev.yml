@@ -35,10 +35,16 @@ services:
         target: /workspace/reference-ui
         bind:
           create_host_path: false
+      - type: bind
+        source: "${FRONTWAS_HOST_PATH:-../frontend}"
+        target: /workspace/frontend
+        bind:
+          create_host_path: false
       - vite_node_modules:/workspace/react-web-ui/node_modules
     environment:
       WEB_UI_PATH: /workspace/react-web-ui
       REFERENCE_UI_PATH: /workspace/reference-ui
+      FRONTEND_PATH: /workspace/frontend
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     command: >
       sh -c "if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
