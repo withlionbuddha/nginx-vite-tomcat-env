@@ -19,19 +19,19 @@ services:
       context: .
       dockerfile: vite-devserver/Dockerfile.dev
     container_name: vite-devserver-${APP_NAME}
-    working_dir: /workspace/web-ui
+    working_dir: /workspace/react-web-ui
     init: true
     expose:
       - "8183"
     volumes:
       - type: bind
-        source: "${WEB_UI_HOST_PATH:-../web-ui}"
-        target: /workspace/web-ui
+        source: "${WEB_UI_HOST_PATH:-../react-web-ui}"
+        target: /workspace/react-web-ui
         bind:
           create_host_path: false
-      - vite_node_modules:/workspace/web-ui/node_modules
+      - vite_node_modules:/workspace/react-web-ui/node_modules
     environment:
-      WEB_UI_PATH: /workspace/web-ui
+      WEB_UI_PATH: /workspace/react-web-ui
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     networks:
       - web-network
