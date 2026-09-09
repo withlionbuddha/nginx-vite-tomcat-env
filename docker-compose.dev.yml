@@ -2,7 +2,7 @@ name: integrated-${APP_NAME}-dev
 
 services:
   nginx-staticweb:
-    image: "${NGINX_IMAGE}"
+    image: "nginx:${NGINX_VERSION}"
     container_name: nginx-staticweb-${APP_NAME}
     ports:
       - "${NGINX_BIND_ADDRESS}:${NGINX_PORT}:${NGINX_CONTAINER_PORT}"
@@ -19,6 +19,9 @@ services:
     build:
       context: .
       dockerfile: "${VITE_DOCKERFILE}"
+      args:
+        NODE_VERSION: "${NODE_VERSION}"
+        VITE_VERSION: "${VITE_VERSION}"
     container_name: vite-devserver-${APP_NAME}
     working_dir: "${WEB_UI_CONTAINER_PATH}"
     init: true
@@ -60,6 +63,9 @@ services:
     build:
       context: .
       dockerfile: "${VITE_DOCKERFILE}"
+      args:
+        NODE_VERSION: "${NODE_VERSION}"
+        VITE_VERSION: "${VITE_VERSION}"
     container_name: ref-vite-devserver-${APP_NAME}
     working_dir: "${REFERENCE_UI_WORKING_DIR}"
     init: true
@@ -89,6 +95,8 @@ services:
     build:
       context: .
       dockerfile: "${TOMCAT_DOCKERFILE}"
+      args:
+        TOMCAT_VERSION: "${TOMCAT_VERSION}"
     image: "${TOMCAT_IMAGE}"
     container_name: tomcat-frontend-${APP_NAME}
     ports:
