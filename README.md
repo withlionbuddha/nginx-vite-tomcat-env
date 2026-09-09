@@ -8,7 +8,7 @@
 
 ## 1. Server Specification
 
-### 1.1. Nginx Web Server
+### &emsp;1.1. Nginx Web Server
 
 > | 항목 | 값 |
 > | --- | --- |
@@ -22,7 +22,7 @@
 
 &emsp;개발 구성에서 `/` 요청은 `vite-devserver:8183`으로 전달하고 `/api/*` 요청은 `tomcat-frontend:8080`으로 전달합니다.
 
-### 1.2. Dev Vite Development Server
+### &emsp;1.2. Dev Vite Development Server
 
 > | 항목 | 값 |
 > | --- | --- |
@@ -43,7 +43,7 @@
 yarn dev --host 0.0.0.0 --port 8183
 ```
 
-### 1.3. Reference Vite Development Server
+### &emsp;1.3. Reference Vite Development Server
 
 > | 항목 | 값 |
 > | --- | --- |
@@ -58,7 +58,7 @@ yarn dev --host 0.0.0.0 --port 8183
 
 &emsp;Reference UI 소스가 있으면 실제 애플리케이션을 실행하고, 없으면 fallback Vite를 `8184` 포트에서 실행합니다.
 
-### 1.4. Tomcat Front WAS
+### &emsp;1.4. Tomcat Front WAS
 
 > | 항목 | 값 |
 > | --- | --- |
@@ -75,7 +75,7 @@ yarn dev --host 0.0.0.0 --port 8183
 
 ## 2. Server Architecture
 
-### 2.1. 서버 구성도
+### &emsp;2.1. 서버 구성도
 
 ```text
                                   Browser
@@ -106,7 +106,7 @@ yarn dev --host 0.0.0.0 --port 8183
        +--------------------------------+
 ```
 
-### 2.2. 브라우저 접속 구조
+### &emsp;2.2. 브라우저 접속 구조
 
 ```text
 http://localhost:8080   -> Nginx -> Dev Vite
@@ -117,7 +117,7 @@ http://localhost:18080  -> Tomcat 직접 접속
 
 ## 3. Compose 개발 구성
 
-### 3.1. Reference UI 포함
+### &emsp;3.1. Reference UI 포함
 
 ```powershell
 docker compose -f docker-compose.dev.yml up --build -d
@@ -127,7 +127,7 @@ docker compose -f docker-compose.dev.yml up --build -d
 
 &emsp;`WEB_UI_SOURCE_PATH`와 `REFERENCE_UI_SOURCE_PATH`에 실제 애플리케이션 소스가 없어도 fallback Vite가 실행되므로 4개 서버를 모두 브라우저에서 확인할 수 있습니다.
 
-### 3.2. Reference UI 제외
+### &emsp;3.2. Reference UI 제외
 
 ```powershell
 docker compose -f docker-compose.dev.no-reference.yml up --build -d
@@ -135,7 +135,7 @@ docker compose -f docker-compose.dev.no-reference.yml up --build -d
 
 &emsp;이 구성은 `REFERENCE_UI_SOURCE_PATH`를 참조하지 않으며 Reference Vite를 제외한 3개 서비스를 실행합니다.
 
-### 3.3. 환경 변수
+### &emsp;3.3. 환경 변수
 
 &emsp;저장소 루트의 `.env`에서 설정합니다.
 
@@ -157,7 +157,7 @@ docker compose -f docker-compose.dev.no-reference.yml up --build -d
 
 ## 4. Docker Build 전 필수 사항
 
-### 4.1. 필수 프로그램
+### &emsp;4.1. 필수 프로그램
 
 > | 항목 | 요구사항 | 다운로드 / 설치 |
 > | --- | --- | --- |
@@ -170,7 +170,7 @@ docker compose -f docker-compose.dev.no-reference.yml up --build -d
 
 &emsp;Node.js, Yarn, Nginx, Tomcat, Java는 호스트에 별도로 설치할 필요가 없습니다. Docker image 내부에서 제공합니다.
 
-### 4.2. Docker 상태 확인
+### &emsp;4.2. Docker 상태 확인
 
 ```powershell
 docker version
@@ -178,7 +178,7 @@ docker compose version
 docker info
 ```
 
-### 4.3. 저장소와 소스 경로
+### &emsp;4.3. 저장소와 소스 경로
 
 ```text
 F:\project.rag
@@ -191,7 +191,7 @@ F:\project.rag
 
 &emsp;React 소스 디렉터리가 없어도 각 Vite 서비스는 fallback 서버로 기동합니다. Tomcat 역시 `frontend` 소스와 `pom.xml` 없이 기동합니다.
 
-### 4.4. `.env` 준비
+### &emsp;4.4. `.env` 준비
 
 ```powershell
 Copy-Item .env.example .env
@@ -216,31 +216,31 @@ NGINX_PORT=8080
 
 ## 5. Docker Build 및 실행
 
-### 5.1. 저장소 위치로 이동
+### &emsp;5.1. 저장소 위치로 이동
 
 ```powershell
 cd F:\project.rag\nginx-vite-tomcat-env
 ```
 
-### 5.2. Compose 설정 검증
+### &emsp;5.2. Compose 설정 검증
 
 ```powershell
 docker compose -f docker-compose.dev.yml config
 ```
 
-### 5.3. Image build 및 컨테이너 시작
+### &emsp;5.3. Image build 및 컨테이너 시작
 
 ```powershell
 docker compose -f docker-compose.dev.yml up --build -d
 ```
 
-### 5.4. 실행 상태 확인
+### &emsp;5.4. 실행 상태 확인
 
 ```powershell
 docker compose -f docker-compose.dev.yml ps
 ```
 
-### 5.5. 서비스 로그 확인
+### &emsp;5.5. 서비스 로그 확인
 
 ```powershell
 docker compose -f docker-compose.dev.yml logs --tail=100 nginx-staticweb
@@ -249,7 +249,7 @@ docker compose -f docker-compose.dev.yml logs --tail=100 ref-vite-devserver
 docker compose -f docker-compose.dev.yml logs --tail=100 tomcat-frontend
 ```
 
-### 5.6. 서버 접속 확인
+### &emsp;5.6. 서버 접속 확인
 
 > | 서버 | URL | 소스가 없을 때 |
 > | --- | --- | --- |
@@ -258,7 +258,7 @@ docker compose -f docker-compose.dev.yml logs --tail=100 tomcat-frontend
 > | Reference Vite | `http://localhost:8184` | fallback Vite 화면 |
 > | Tomcat | `http://localhost:18080` | Tomcat Welcome 화면 |
 
-### 5.7. 종료
+### &emsp;5.7. 종료
 
 ```powershell
 docker compose -f docker-compose.dev.yml down
@@ -266,7 +266,7 @@ docker compose -f docker-compose.dev.yml down
 
 ## 6. Application Source와 Server Infrastructure 분리 원칙
 
-### 6.1. 책임 분리
+### &emsp;6.1. 책임 분리
 
 ```text
 Server Infrastructure
@@ -283,7 +283,7 @@ Application Source / Build
 └─ Maven source / WAR
 ```
 
-### 6.2. API Proxy
+### &emsp;6.2. API Proxy
 
 ```text
 Browser /api/users
@@ -299,7 +299,7 @@ http://tomcat-frontend:8080/api/users
 
 ## 7. Reference
 
-### 7.1. 공식 문서
+### &emsp;7.1. 공식 문서
 
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Docker bind mounts](https://docs.docker.com/engine/storage/bind-mounts/)
