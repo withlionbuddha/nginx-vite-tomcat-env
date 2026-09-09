@@ -24,6 +24,8 @@ services:
     init: true
     expose:
       - "8183"
+    ports:
+      - "${REFERENCE_UI_BIND_ADDRESS:-127.0.0.1}:${REFERENCE_UI_PORT:-8184}:8184"
     volumes:
       - type: bind
         source: "${WEB_UI_HOST_PATH:-../web-ui}"
@@ -33,13 +35,13 @@ services:
       - type: bind
         source: "${REFERENCE_UI_HOST_PATH:-../reference-ui}"
         target: /workspace/reference-ui
-        read_only: true
         bind:
           create_host_path: false
       - vite_node_modules:/workspace/web-ui/node_modules
     environment:
       WEB_UI_PATH: /workspace/web-ui
       REFERENCE_UI_PATH: /workspace/reference-ui
+      REFERENCE_UI_PORT: "${REFERENCE_UI_PORT:-8184}"
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     networks:
       - web-network
