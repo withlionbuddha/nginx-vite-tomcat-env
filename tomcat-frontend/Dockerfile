@@ -1,18 +1,12 @@
-# syntax=docker/dockerfile:1
-FROM maven:3.9.16-eclipse-temurin-21-noble AS build
-
-WORKDIR /workspace/frontend
-
-# The external Maven project must produce one deployable WAR.
-RUN --mount=type=bind,from=frontwas_source,target=/source \
-    tar -C /source --exclude=target --exclude=.git -cf /tmp/frontwas-source.tar . \
-    && tar -C /workspace/frontend -xf /tmp/frontwas-source.tar \
-    && rm /tmp/frontwas-source.tar
-RUN mvn -B -DskipTests package
-
 FROM tomcat:10.1.59-jre21-temurin-noble
 
-RUN rm -rf /usr/local/tomcat/webapps/*
-COPY --from=build /workspace/frontend/target/*.war /usr/local/tomcat/webapps/ROOT.war
+# Keep the WAS runnable even when no application source or WAR is available.
+RUN rm -rf /usr/local/tomcat/webapps/* \
+    && mkdir -p /usr/local/tomcat/webapps/ROOT \
+    && printf '%s\n' \
+       '<!doctype html>' \
+       '<html><head><meta charset="utf-8"><title>Tomcat Frontend</title></head>' \
+       '<body><h1>Tomcat Frontend is running</h1><p>No application WAR is deployed.</p></body></html>' \
+       > /usr/local/tomcat/webapps/ROOT/index.html
 
 EXPOSE 8080
