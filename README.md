@@ -1,6 +1,6 @@
 # React Web Server와 Tomcat Front WAS 개발 환경
 
-[![Reference](https://img.shields.io/badge/Reference-Official%20Docs-blue)](#7-reference) [![Docker Docs](https://img.shields.io/badge/Ref%20Doc-Docker-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/) [![Nginx Docs](https://img.shields.io/badge/Ref%20Doc-Nginx-009639?logo=nginx&logoColor=white)](https://nginx.org/en/docs/) [![Vite Docs](https://img.shields.io/badge/Ref%20Doc-Vite-646CFF?logo=vite&logoColor=white)](https://vite.dev/config/server-options) [![Tomcat Docs](https://img.shields.io/badge/Ref%20Doc-Tomcat-F8DC75?logo=apachetomcat&logoColor=black)](https://tomcat.apache.org/tomcat-10.1-doc/)
+[![Docker Docs](https://img.shields.io/badge/Ref%20Doc-Docker-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/) [![Nginx Docs](https://img.shields.io/badge/Ref%20Doc-Nginx-009639?logo=nginx&logoColor=white)](https://nginx.org/en/docs/) [![Vite Docs](https://img.shields.io/badge/Ref%20Doc-Vite-646CFF?logo=vite&logoColor=white)](https://vite.dev/config/server-options) [![Tomcat Docs](https://img.shields.io/badge/Ref%20Doc-Tomcat-F8DC75?logo=apachetomcat&logoColor=black)](https://tomcat.apache.org/tomcat-10.1-doc/)
 
 &emsp;이 저장소는 **Static Web Server 영역(Nginx + Dev Vite + Reference Vite)** 과 **Web Application Server 영역(Tomcat)** 을 Docker Compose로 실행하기 위한 개발 환경입니다.
 
@@ -10,32 +10,32 @@
 
 ### &emsp;1.1. Nginx Web Server
 
->> | 항목 | 값 |
->> | --- | --- |
->> | Compose service | `nginx-staticweb` |
->> | Image | `nginx:1.30.4-alpine3.24` |
->> | Container port | `80` |
->> | Default host port | `8080` |
->> | Default URL | `http://localhost:8080` |
->> | Configuration | `nginx/default.dev.conf` |
->> | 역할 | 개발 React 화면 프록시 및 `/api/*` 요청을 Tomcat으로 전달 |
+> | 항목 | 값 |
+> | --- | --- |
+> | Compose service | `nginx-staticweb` |
+> | Image | `nginx:1.30.4-alpine3.24` |
+> | Container port | `80` |
+> | Default host port | `8080` |
+> | Default URL | `http://localhost:8080` |
+> | Configuration | `nginx/default.dev.conf` |
+> | 역할 | 개발 React 화면 프록시 및 `/api/*` 요청을 Tomcat으로 전달 |
 
 &emsp;개발 구성에서 `/` 요청은 `vite-devserver:8183`으로 전달하고 `/api/*` 요청은 `tomcat-frontend:8080`으로 전달합니다.
 
 ### &emsp;1.2. Dev Vite Development Server
 
->> | 항목 | 값 |
->> | --- | --- |
->> | Compose service | `vite-devserver` |
->> | Base image | `node:24.20.0-bookworm` |
->> | Node.js | `24.20.0` |
->> | Package manager | Yarn 1.x |
->> | Working directory | `/workspace/react-web-ui` |
->> | Container port | `8183` |
->> | Default host port | `8183` |
->> | Default URL | `http://localhost:8183` |
->> | Host source | `${WEB_UI_SOURCE_PATH:-../react-web-ui}` |
->> | `node_modules` | Docker named volume `vite_node_modules` |
+> | 항목 | 값 |
+> | --- | --- |
+> | Compose service | `vite-devserver` |
+> | Base image | `node:24.20.0-bookworm` |
+> | Node.js | `24.20.0` |
+> | Package manager | Yarn 1.x |
+> | Working directory | `/workspace/react-web-ui` |
+> | Container port | `8183` |
+> | Default host port | `8183` |
+> | Default URL | `http://localhost:8183` |
+> | Host source | `${WEB_UI_SOURCE_PATH:-../react-web-ui}` |
+> | `node_modules` | Docker named volume `vite_node_modules` |
 
 &emsp;`WEB_UI_SOURCE_PATH`에 React 소스와 `package.json`이 있으면 필요한 dependency를 설치한 뒤 실제 Dev Vite 서버를 시작합니다. 소스가 없으면 fallback Vite를 `8183` 포트에서 실행합니다.
 
@@ -45,31 +45,31 @@ yarn dev --host 0.0.0.0 --port 8183
 
 ### &emsp;1.3. Reference Vite Development Server
 
->> | 항목 | 값 |
->> | --- | --- |
->> | Compose service | `ref-vite-devserver` |
->> | Base image | `node:24.20.0-bookworm` |
->> | Working directory | `/workspace/reference-ui/apps/react-vite` |
->> | Container port | `8184` |
->> | Default host port | `8184` |
->> | Default URL | `http://localhost:8184` |
->> | Host source | `${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}` |
->> | `node_modules` | Docker named volume `ref_vite_node_modules` |
+> | 항목 | 값 |
+> | --- | --- |
+> | Compose service | `ref-vite-devserver` |
+> | Base image | `node:24.20.0-bookworm` |
+> | Working directory | `/workspace/reference-ui/apps/react-vite` |
+> | Container port | `8184` |
+> | Default host port | `8184` |
+> | Default URL | `http://localhost:8184` |
+> | Host source | `${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}` |
+> | `node_modules` | Docker named volume `ref_vite_node_modules` |
 
 &emsp;Reference UI 소스가 있으면 실제 애플리케이션을 실행하고, 없으면 fallback Vite를 `8184` 포트에서 실행합니다.
 
 ### &emsp;1.4. Tomcat Front WAS
 
->> | 항목 | 값 |
->> | --- | --- |
->> | Compose service | `tomcat-frontend` |
->> | Image | `tomcat:10.1.59-jre21-temurin-noble` 기반 |
->> | Tomcat | `10.1.59` |
->> | Java runtime | Eclipse Temurin JRE 21 |
->> | Container port | `8080` |
->> | Default host port | `18080` |
->> | Default URL | `http://localhost:18080` |
->> | 역할 | Front WAS 및 향후 WAR 배포 대상 |
+> | 항목 | 값 |
+> | --- | --- |
+> | Compose service | `tomcat-frontend` |
+> | Image | `tomcat:10.1.59-jre21-temurin-noble` 기반 |
+> | Tomcat | `10.1.59` |
+> | Java runtime | Eclipse Temurin JRE 21 |
+> | Container port | `8080` |
+> | Default host port | `18080` |
+> | Default URL | `http://localhost:18080` |
+> | 역할 | Front WAS 및 향후 WAR 배포 대상 |
 
 &emsp;Tomcat은 Maven 프로젝트나 WAR가 없어도 정상 기동됩니다. 애플리케이션 배포 전에는 `http://localhost:18080`에서 Apache Tomcat 기본 Welcome 화면을 확인할 수 있습니다.
 
@@ -139,34 +139,34 @@ docker compose -f docker-compose.dev.no-reference.yml up --build -d
 
 &emsp;저장소 루트의 `.env`에서 설정합니다.
 
->> | 변수 | 기본값 | 용도 |
->> | --- | --- | --- |
->> | `APP_NAME` | `muilti-domain-rag` | Compose 및 컨테이너 식별자 |
->> | `NGINX_BIND_ADDRESS` | `127.0.0.1` | Nginx 호스트 바인딩 주소 |
->> | `NGINX_PORT` | `8080` | Nginx 호스트 포트 |
->> | `WEB_UI_SOURCE_PATH` | `../react-web-ui` | Dev React 소스 경로 |
->> | `VITE_BIND_ADDRESS` | `127.0.0.1` | Dev Vite 호스트 바인딩 주소 |
->> | `VITE_PORT` | `8183` | Dev Vite 호스트 포트 |
->> | `REFERENCE_UI_SOURCE_PATH` | `../reactex/bulletproof-react` | Reference UI 소스 경로 |
->> | `REFERENCE_UI_BIND_ADDRESS` | `127.0.0.1` | Reference Vite 바인딩 주소 |
->> | `REFERENCE_UI_PORT` | `8184` | Reference Vite 호스트 포트 |
->> | `VITE_USE_POLLING` | `true` | Windows bind mount 파일 변경 감지 |
->> | `FRONTWAS_BIND_ADDRESS` | `127.0.0.1` | Tomcat 호스트 바인딩 주소 |
->> | `FRONTWAS_PORT` | `18080` | Tomcat 호스트 포트 |
->> | `FRONTEND_SOURCE_PATH` | `../frontend` | 선택적 Maven/WAR 소스 경로 |
+> | 변수 | 기본값 | 용도 |
+> | --- | --- | --- |
+> | `APP_NAME` | `muilti-domain-rag` | Compose 및 컨테이너 식별자 |
+> | `NGINX_BIND_ADDRESS` | `127.0.0.1` | Nginx 호스트 바인딩 주소 |
+> | `NGINX_PORT` | `8080` | Nginx 호스트 포트 |
+> | `WEB_UI_SOURCE_PATH` | `../react-web-ui` | Dev React 소스 경로 |
+> | `VITE_BIND_ADDRESS` | `127.0.0.1` | Dev Vite 호스트 바인딩 주소 |
+> | `VITE_PORT` | `8183` | Dev Vite 호스트 포트 |
+> | `REFERENCE_UI_SOURCE_PATH` | `../reactex/bulletproof-react` | Reference UI 소스 경로 |
+> | `REFERENCE_UI_BIND_ADDRESS` | `127.0.0.1` | Reference Vite 바인딩 주소 |
+> | `REFERENCE_UI_PORT` | `8184` | Reference Vite 호스트 포트 |
+> | `VITE_USE_POLLING` | `true` | Windows bind mount 파일 변경 감지 |
+> | `FRONTWAS_BIND_ADDRESS` | `127.0.0.1` | Tomcat 호스트 바인딩 주소 |
+> | `FRONTWAS_PORT` | `18080` | Tomcat 호스트 포트 |
+> | `FRONTEND_SOURCE_PATH` | `../frontend` | 선택적 Maven/WAR 소스 경로 |
 
 ## 4. Docker Build 전 필수 사항
 
 ### &emsp;4.1. 필수 프로그램
 
->> | 항목 | 요구사항 | 다운로드 / 설치 |
->> | --- | --- | --- |
->> | Docker Desktop | Windows에서 Linux container 실행 가능 상태 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) |
->> | Docker Engine | Docker Desktop에서 실행 중 | Docker Desktop에 포함 |
->> | Docker Compose | `docker compose` 명령 사용 가능 | Docker Desktop에 포함 |
->> | Git | 저장소 checkout 및 변경 관리 | [Git for Windows](https://git-scm.com/download/win) |
->> | VS Code | Dev Container 사용 시 권장 | [Visual Studio Code](https://code.visualstudio.com/download) |
->> | Dev Containers extension | VS Code Dev Container 사용 시 필요 | [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) |
+> | 항목 | 요구사항 | 다운로드 / 설치 |
+> | --- | --- | --- |
+> | Docker Desktop | Windows에서 Linux container 실행 가능 상태 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) |
+> | Docker Engine | Docker Desktop에서 실행 중 | Docker Desktop에 포함 |
+> | Docker Compose | `docker compose` 명령 사용 가능 | Docker Desktop에 포함 |
+> | Git | 저장소 checkout 및 변경 관리 | [Git for Windows](https://git-scm.com/download/win) |
+> | VS Code | Dev Container 사용 시 권장 | [Visual Studio Code](https://code.visualstudio.com/download) |
+> | Dev Containers extension | VS Code Dev Container 사용 시 필요 | [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) |
 
 &emsp;Node.js, Yarn, Nginx, Tomcat, Java는 호스트에 별도로 설치할 필요가 없습니다. Docker image 내부에서 제공합니다.
 
@@ -251,12 +251,12 @@ docker compose -f docker-compose.dev.yml logs --tail=100 tomcat-frontend
 
 ### &emsp;5.6. 서버 접속 확인
 
->> | 서버 | URL | 소스가 없을 때 |
->> | --- | --- | --- |
->> | Nginx | `http://localhost:8080` | Dev Vite fallback 화면으로 프록시 |
->> | Dev Vite | `http://localhost:8183` | fallback Vite 화면 |
->> | Reference Vite | `http://localhost:8184` | fallback Vite 화면 |
->> | Tomcat | `http://localhost:18080` | Tomcat Welcome 화면 |
+> | 서버 | URL | 소스가 없을 때 |
+> | --- | --- | --- |
+> | Nginx | `http://localhost:8080` | Dev Vite fallback 화면으로 프록시 |
+> | Dev Vite | `http://localhost:8183` | fallback Vite 화면 |
+> | Reference Vite | `http://localhost:8184` | fallback Vite 화면 |
+> | Tomcat | `http://localhost:18080` | Tomcat Welcome 화면 |
 
 ### &emsp;5.7. 종료
 
@@ -296,13 +296,3 @@ http://tomcat-frontend:8080/api/users
 ```
 
 &emsp;WAR가 배포되지 않은 상태에서는 `/api/*`에 애플리케이션 응답이 없을 수 있으며, 이는 Tomcat 서버 기동 실패와 구분합니다.
-
-## 7. Reference
-
-### &emsp;7.1. 공식 문서
-
-- [Docker Compose](https://docs.docker.com/compose/)
-- [Docker bind mounts](https://docs.docker.com/engine/storage/bind-mounts/)
-- [Docker volumes](https://docs.docker.com/engine/storage/volumes/)
-- [Apache Tomcat 10.1](https://tomcat.apache.org/tomcat-10.1-doc/)
-- [Vite server options](https://vite.dev/config/server-options)
