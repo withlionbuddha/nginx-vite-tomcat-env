@@ -1,19 +1,19 @@
-name: front-${APP_NAME}
+name: integrated-${APP_NAME}-dev
 
 services:
-  nginx-web:
+  nginx-staticweb:
     image: nginx:1.30.4-alpine3.24
-    container_name: nginx-web-${APP_NAME}
+    container_name: nginx-staticweb-${APP_NAME}
     ports:
       - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
     volumes:
-      - ./nginx/default.dev.conf:/etc/nginx/templates/default.conf.template:ro
+      - ./nginx/default.dev.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - vite-devserver
       - tomcat-frontend
     restart: unless-stopped
     networks:
-      - web-frontwas-network
+      - web-network
 
   vite-devserver:
     build:
@@ -35,23 +35,25 @@ services:
       WEB_UI_PATH: /workspace/web-ui
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     networks:
-      - web-frontwas-network
+      - web-network
 
   tomcat-frontend:
     build:
-      context: ..
-      dockerfile: ./nginx-vite-tomcat-env/tomcat-frontend/Dockerfile
+      context: .
+      dockerfile: tomcat-frontend/Dockerfile
+      additional_contexts:
+        frontwas_source: "${FRONTWAS_HOST_PATH:-../frontend}"
     image: tomcat-frontend:${APP_NAME}
     container_name: tomcat-frontend-${APP_NAME}
     expose:
       - "8080"
     restart: unless-stopped
     networks:
-      - web-frontwas-network
+      - web-network
+
 volumes:
   vite_node_modules:
 
 networks:
- web-frontwas-network:
-    name: web-frontwas-network-${APP_NAME}
+  web-network:
     driver: bridge
