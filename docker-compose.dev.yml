@@ -67,12 +67,10 @@ services:
     build:
       context: .
       dockerfile: tomcat-frontend/Dockerfile
-      additional_contexts:
-        frontwas_source: "${FRONTWAS_HOST_PATH:-../frontend}"
     image: tomcat-frontend:${APP_NAME}
     container_name: tomcat-frontend-${APP_NAME}
-    expose:
-      - "8080"
+    ports:
+      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PORT:-18080}:8080"
     restart: unless-stopped
     networks:
       - web-network
