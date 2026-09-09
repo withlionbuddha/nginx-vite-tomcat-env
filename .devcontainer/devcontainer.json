@@ -1,9 +1,13 @@
 {
-  "name": "nginx-vite-tomcat-frontweb",
+  "name": "nginx-vite-tomcat-env",
   "image": "node:24.20.0-bookworm",
   "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind",
-  "workspaceFolder": "/workspace/web-ui",
-  "postCreateCommand": "sh /workspace/nginx-vite-tomcat-compose/scripts/init-web-ui.sh",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "sh /workspace/nginx-vite-tomcat-env/scripts/init-web-ui.sh",
+  "containerEnv": {
+    "WEB_UI_PATH": "/workspace/web-ui",
+    "REFERENCE_UI_PATH": "/workspace/reactex/bulletproof-react"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
