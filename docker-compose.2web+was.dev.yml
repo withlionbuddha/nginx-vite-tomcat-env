@@ -1,4 +1,4 @@
-name: integrated-${APP_NAME}-dev-no-reference
+name: integrated-${APP_NAME}-dev
 
 services:
   nginx-staticweb:
@@ -40,6 +40,29 @@ services:
     networks:
       - web-network
 
+  ref-vite-devserver:
+    image: node:24.20.0-bookworm
+    container_name: ref-vite-devserver-${APP_NAME}
+    working_dir: /workspace/reference-ui/apps/react-vite
+    init: true
+    ports:
+      - "${REFERENCE_UI_BIND_ADDRESS:-127.0.0.1}:${REFERENCE_UI_PORT:-8184}:8184"
+    volumes:
+      - type: bind
+        source: "${REFERENCE_UI_HOST_PATH:-../reactex/bulletproof-react}"
+        target: /workspace/reference-ui
+        bind:
+          create_host_path: false
+      - ref_vite_node_modules:/workspace/reference-ui/apps/react-vite/node_modules
+    environment:
+      REFERENCE_UI_PATH: /workspace/reference-ui
+      CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
+    command: >
+      sh -c "if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
+             exec yarn dev --host 0.0.0.0 --port 8184"
+    networks:
+      - web-network
+
   tomcat-frontend:
     build:
       context: .
@@ -54,6 +77,7 @@ services:
 
 volumes:
   vite_node_modules:
+  ref_vite_node_modules:
 
 networks:
   web-network:
