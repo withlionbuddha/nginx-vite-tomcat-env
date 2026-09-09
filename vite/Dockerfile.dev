@@ -1,8 +1,10 @@
-FROM node:24.20.0-bookworm
+ARG NODE_VERSION
+FROM node:${NODE_VERSION}
 
+ARG VITE_VERSION
 RUN mkdir -p /opt/vite-fallback \
     && cd /opt/vite-fallback \
-    && printf '{"private":true,"devDependencies":{"vite":"latest"}}\n' > package.json \
+    && printf '{"private":true,"devDependencies":{"vite":"%s"}}\n' "${VITE_VERSION}" > package.json \
     && npm install --no-audit --no-fund \
     && printf '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vite Server</title></head><body><h1>Vite server is running</h1><p>Application source is not mounted.</p></body></html>\n' > index.html
 
