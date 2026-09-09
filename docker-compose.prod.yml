@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: nginx/Dockerfile.prod
       additional_contexts:
-        web_ui_source: "${WEB_UI_HOST_PATH:-../web-ui}"
+        web_ui_source: "${WEB_UI_HOST_PATH:-../react-web-ui}"
       args:
         NGINX_CONFIG: default.prod.conf
     image: nginx-staticweb:${APP_NAME}-integrated-prod
