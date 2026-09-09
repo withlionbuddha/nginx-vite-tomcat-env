@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: tomcat-frontend/Dockerfile
       additional_contexts:
-        frontwas_source: "${FRONTWAS_HOST_PATH:-../frontend}"
+        frontwas_source: "${FRONTEND_SOURCE_PATH:-../frontend}"
     image: tomcat-frontend:${APP_NAME}
     container_name: tomcat-frontend-${APP_NAME}
     ports:
