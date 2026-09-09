@@ -48,8 +48,8 @@ services:
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     command: >
       sh -c "if [ ! -f package.json ]; then
-               echo 'Main React source not found; keeping Vite container available without starting Vite.';
-               exec tail -f /dev/null;
+               echo 'Main React source not found; starting fallback Vite server on port 8183.';
+               exec /opt/vite-fallback/node_modules/.bin/vite /opt/vite-fallback --host 0.0.0.0 --port 8183;
              fi;
              if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
              exec yarn dev --host 0.0.0.0 --port 8183"
@@ -57,7 +57,9 @@ services:
       - web-network
 
   ref-vite-devserver:
-    image: node:24.20.0-bookworm
+    build:
+      context: .
+      dockerfile: vite-devserver/Dockerfile.dev
     container_name: ref-vite-devserver-${APP_NAME}
     working_dir: /workspace/reference-ui/apps/react-vite
     init: true
@@ -75,8 +77,8 @@ services:
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     command: >
       sh -c "if [ ! -f package.json ]; then
-               echo 'Reference React source not found; keeping reference Vite container available without starting Vite.';
-               exec tail -f /dev/null;
+               echo 'Reference React source not found; starting fallback Vite server on port 8184.';
+               exec /opt/vite-fallback/node_modules/.bin/vite /opt/vite-fallback --host 0.0.0.0 --port 8184;
              fi;
              if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
              exec yarn dev --host 0.0.0.0 --port 8184"
