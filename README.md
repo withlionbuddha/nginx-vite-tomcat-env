@@ -315,7 +315,8 @@ Server Infrastructure
 Application Source / Build
 ├─ React source
 ├─ Reference React source
-└─ Maven source / WAR
+└─ Java application source
+   └─ Maven build → WAR
 ```
 
 ### &emsp;6.2. API Proxy
