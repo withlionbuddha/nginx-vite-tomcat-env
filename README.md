@@ -1,4 +1,4 @@
-# React Web Server와 Front WAS 개발 환경
+# React Web Server와 Tomcat Front WAS 개발 환경
 
 이 저장소는 Nginx, Vite React 개발 서버, Reference Vite 서버, Tomcat WAS를 Docker Compose로 실행하기 위한 개발 환경입니다. 애플리케이션 소스가 준비되지 않은 상태에서도 Nginx와 Tomcat 같은 서버 인프라는 먼저 기동할 수 있도록 구성합니다.
 
