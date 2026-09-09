@@ -1,5 +1,11 @@
 FROM node:24.20.0-bookworm
 
+RUN mkdir -p /opt/vite-fallback \
+    && cd /opt/vite-fallback \
+    && printf '{"private":true,"devDependencies":{"vite":"latest"}}\n' > package.json \
+    && npm install --no-audit --no-fund \
+    && printf '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vite Server</title></head><body><h1>Vite server is running</h1><p>Application source is not mounted.</p></body></html>\n' > index.html
+
 WORKDIR /workspace/react-web-ui
 
-EXPOSE 8183
+EXPOSE 8183 8184
