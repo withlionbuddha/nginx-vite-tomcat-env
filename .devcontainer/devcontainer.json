@@ -1,12 +1,29 @@
 {
   "name": "nginx-vite-tomcat-env",
-  "image": "node:24.20.0-bookworm",
-  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind",
-  "workspaceFolder": "/workspace",
-  "postCreateCommand": "sh /workspace/nginx-vite-tomcat-env/scripts/init-web-ui.sh",
-  "containerEnv": {
-    "WEB_UI_PATH": "/workspace/web-ui",
-    "REFERENCE_UI_PATH": "/workspace/reactex/bulletproof-react"
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "vite-devserver",
+  "runServices": [
+    "nginx-staticweb",
+    "vite-devserver",
+    "ref-vite-devserver",
+    "tomcat-frontend"
+  ],
+  "workspaceFolder": "/workspace/web-ui",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [8080, 8183, 8184, 18080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Nginx Web Server"
+    },
+    "8183": {
+      "label": "Vite Development Server"
+    },
+    "8184": {
+      "label": "Reference Vite Server"
+    },
+    "18080": {
+      "label": "Tomcat Frontend"
+    }
   },
   "customizations": {
     "vscode": {
