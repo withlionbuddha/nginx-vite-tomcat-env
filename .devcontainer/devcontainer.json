@@ -8,23 +8,8 @@
     "ref-vite-devserver",
     "tomcat-frontend"
   ],
-  "workspaceFolder": "/workspace/web-ui",
+  "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
-  "forwardPorts": [8080, 8183, 8184, 18080],
-  "portsAttributes": {
-    "8080": {
-      "label": "Nginx Web Server"
-    },
-    "8183": {
-      "label": "Vite Development Server"
-    },
-    "8184": {
-      "label": "Reference Vite Server"
-    },
-    "18080": {
-      "label": "Tomcat Frontend"
-    }
-  },
   "customizations": {
     "vscode": {
       "extensions": [
