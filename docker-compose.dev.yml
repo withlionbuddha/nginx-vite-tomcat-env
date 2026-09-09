@@ -26,17 +26,17 @@ services:
       - "${VITE_BIND_ADDRESS:-127.0.0.1}:${VITE_PORT:-8183}:8183"
     volumes:
       - type: bind
-        source: "${WEB_UI_HOST_PATH:-../react-web-ui}"
+        source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
         target: /workspace/react-web-ui
         bind:
           create_host_path: false
       - type: bind
-        source: "${REFERENCE_UI_HOST_PATH:-../reactex/bulletproof-react}"
+        source: "${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}"
         target: /workspace/reference-ui
         bind:
           create_host_path: false
       - type: bind
-        source: "${FRONTWAS_HOST_PATH:-../frontend}"
+        source: "${FRONTEND_SOURCE_PATH:-../frontend}"
         target: /workspace/frontend
         bind:
           create_host_path: false
@@ -61,7 +61,7 @@ services:
       - "${REFERENCE_UI_BIND_ADDRESS:-127.0.0.1}:${REFERENCE_UI_PORT:-8184}:8184"
     volumes:
       - type: bind
-        source: "${REFERENCE_UI_HOST_PATH:-../reactex/bulletproof-react}"
+        source: "${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}"
         target: /workspace/reference-ui
         bind:
           create_host_path: false
