@@ -1,33 +1,38 @@
-name: frontweb-${APP_NAME}
+name: integrated-${APP_NAME}-prod
 
 services:
   nginx-staticweb:
     build:
-      context: ..
-      dockerfile: ./nginx-vite-tomcat-compose/nginx/Dockerfile.prod
-    image: nginx-staticweb:${APP_NAME}
+      context: .
+      dockerfile: nginx/Dockerfile.prod
+      additional_contexts:
+        web_ui_source: "${WEB_UI_HOST_PATH:-../web-ui}"
+      args:
+        NGINX_CONFIG: default.prod.conf
+    image: nginx-staticweb:${APP_NAME}-integrated-prod
     container_name: nginx-staticweb-${APP_NAME}
     ports:
       - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
     depends_on:
-      - tomcat-frontweb
+      - tomcat-frontend
     restart: unless-stopped
     networks:
-      - frontweb-network
+      - web-network
 
-  tomcat-frontweb:
+  tomcat-frontend:
     build:
-      context: ..
-      dockerfile: ./nginx-vite-tomcat-compose/tomcat-frontweb/Dockerfile
-    image: tomcat-frontweb:${APP_NAME}
-    container_name: tomcat-frontweb-${APP_NAME}
+      context: .
+      dockerfile: tomcat-frontend/Dockerfile
+      additional_contexts:
+        frontwas_source: "${FRONTWAS_HOST_PATH:-../frontend}"
+    image: tomcat-frontend:${APP_NAME}
+    container_name: tomcat-frontend-${APP_NAME}
     expose:
       - "8080"
     restart: unless-stopped
     networks:
-      - frontweb-network
+      - web-network
 
 networks:
-  frontweb-network:
-    name: frontweb-network-${APP_NAME}
+  web-network:
     driver: bridge
