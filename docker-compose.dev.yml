@@ -30,9 +30,16 @@ services:
         target: /workspace/web-ui
         bind:
           create_host_path: false
+      - type: bind
+        source: "${REFERENCE_UI_HOST_PATH:-../reference-ui}"
+        target: /workspace/reference-ui
+        read_only: true
+        bind:
+          create_host_path: false
       - vite_node_modules:/workspace/web-ui/node_modules
     environment:
       WEB_UI_PATH: /workspace/web-ui
+      REFERENCE_UI_PATH: /workspace/reference-ui
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     networks:
       - web-network
