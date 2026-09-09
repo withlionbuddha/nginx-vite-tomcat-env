@@ -20,19 +20,19 @@ services:
       context: .
       dockerfile: vite-devserver/Dockerfile.dev
     container_name: vite-devserver-${APP_NAME}
-    working_dir: /workspace/web-ui
+    working_dir: /workspace/react-web-ui
     init: true
     ports:
       - "${VITE_BIND_ADDRESS:-127.0.0.1}:${VITE_PORT:-8183}:8183"
     volumes:
       - type: bind
-        source: "${WEB_UI_HOST_PATH:-../web-ui}"
-        target: /workspace/web-ui
+        source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
+        target: /workspace/react-web-ui
         bind:
           create_host_path: false
-      - vite_node_modules:/workspace/web-ui/node_modules
+      - vite_node_modules:/workspace/react-web-ui/node_modules
     environment:
-      WEB_UI_PATH: /workspace/web-ui
+      WEB_UI_PATH: /workspace/react-web-ui
       CHOKIDAR_USEPOLLING: "${VITE_USE_POLLING:-true}"
     command: >
       sh -c "if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
@@ -49,7 +49,7 @@ services:
       - "${REFERENCE_UI_BIND_ADDRESS:-127.0.0.1}:${REFERENCE_UI_PORT:-8184}:8184"
     volumes:
       - type: bind
-        source: "${REFERENCE_UI_HOST_PATH:-../reactex/bulletproof-react}"
+        source: "${REFERENCE_UI_SOURCE_PATH:-../reactex/bulletproof-react}"
         target: /workspace/reference-ui
         bind:
           create_host_path: false
