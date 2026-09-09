@@ -4,7 +4,7 @@ services:
   tomcat-frontend:
     build:
       context: .
-      dockerfile: tomcat-frontend/Dockerfile
+      dockerfile: tomcat/Dockerfile
       additional_contexts:
         frontwas_source: "${FRONTEND_SOURCE_PATH:-../frontend}"
     image: tomcat-frontend:${APP_NAME}
