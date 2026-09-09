@@ -58,7 +58,7 @@ yarn dev --host 0.0.0.0 --port 8183
 
 &emsp;Reference UI 소스가 있으면 실제 애플리케이션을 실행하고, 없으면 fallback Vite를 `8184` 포트에서 실행합니다.
 
-### &emsp;1.4. Tomcat Front WAS
+### &emsp;1.4. Tomcat Web Application Server
 
 > | 항목 | 값 |
 > | --- | --- |
