@@ -1,4 +1,4 @@
-# React Web Server와 Tomcat Front WAS 개발 환경
+# Nginx Web Server와 Tomcat Front WAS 개발 환경
 
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/) [![Docker bind mounts](https://img.shields.io/badge/Docker%20bind%20mounts-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/engine/storage/bind-mounts/) [![Docker volumes](https://img.shields.io/badge/Docker%20volumes-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/engine/storage/volumes/) [![Nginx Docs](https://img.shields.io/badge/Nginx-009639?logo=nginx&logoColor=white)](https://nginx.org/en/docs/) [![Apache Tomcat 10.1](https://img.shields.io/badge/Apache%20Tomcat%2010.1-F8DC75?logo=apachetomcat&logoColor=black)](https://tomcat.apache.org/tomcat-10.1-doc/) [![Vite server options](https://img.shields.io/badge/Vite%20server%20options-646CFF?logo=vite&logoColor=white)](https://vite.dev/config/server-options)
 
