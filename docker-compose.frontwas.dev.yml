@@ -20,9 +20,18 @@ services:
     networks:
       - web-network
 
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis-${APP_NAME:-earth-power-n4}-dev
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
 networks:
   web-network:
     driver: bridge
 
 volumes:
   maven-repository:
+  redis-data:
