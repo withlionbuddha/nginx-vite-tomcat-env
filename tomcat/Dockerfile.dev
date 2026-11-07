@@ -8,11 +8,16 @@ FROM maven:${MAVEN_VERSION}-eclipse-temurin-21 AS maven_tools
 #Tomcat + JDK21
 FROM tomcat:${TOMCAT_VERSION}
 
-# Maven 설치
+# JDK 21 전체 복사
+COPY --from=maven_tools /opt/java/openjdk /opt/java/openjdk
+
+# Maven 전체 복사
 COPY --from=maven_tools /usr/share/maven /usr/share/maven
 
-ENV MAVEN_HOME=/usr/share/maven \
-    PATH="/usr/share/maven/bin:${PATH}"
+# 환경변수 설정
+ENV JAVA_HOME=/opt/java/openjdk
+ENV MAVEN_HOME=/usr/share/maven
+ENV PATH="${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${PATH}"
 
 # 설치 검증
 RUN java -version && javac -version && mvn -version
