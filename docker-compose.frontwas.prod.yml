@@ -1,18 +1,16 @@
-name: frontwas-${APP_NAME}-prod
+name: frontwas-${APP_NAME:-earth-power-n4}-prod
 
 services:
   tomcat-frontend:
     build:
       context: .
       dockerfile: tomcat/Dockerfile
-      additional_contexts:
-        frontwas_source: "${FRONTEND_SOURCE_PATH:-../frontend}"
-    image: tomcat-frontend:${APP_NAME}
-    container_name: tomcat-frontend-${APP_NAME}
+      args:
+        TOMCAT_VERSION: ${TOMCAT_VERSION:-10.1-jdk21-temurin}
+    image: tomcat-frontend:${APP_NAME:-earth-power-n4}-prod
+    container_name: tomcat-frontend-${APP_NAME:-earth-power-n4}-prod
     ports:
-      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PORT:-18080}:8080"
-    expose:
-      - "8080"
+      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PROD_PORT:-18081}:8080"
     restart: unless-stopped
     networks:
       - web-network
