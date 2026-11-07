@@ -1,0 +1,24 @@
+# Java 21 JDK-based Tomcat image. Override at build time if required.
+ARG TOMCAT_VERSION=10.1-jdk21-temurin
+ARG MAVEN_VERSION=3.9.11
+
+# Maven 설치 이미지
+FROM maven:${MAVEN_VERSION}-eclipse-temurin-21 AS maven_tools
+
+#Tomcat + JDK21
+FROM tomcat:${TOMCAT_VERSION}
+
+# Maven 설치
+COPY --from=maven_tools /usr/share/maven /usr/share/maven
+
+ENV MAVEN_HOME=/usr/share/maven \
+    PATH="/usr/share/maven/bin:${PATH}"
+
+# 설치 검증
+RUN java -version && javac -version && mvn -version
+
+# Restore Tomcat's default applications for a standalone health check.
+# Remove this step for production if the default applications are not needed.
+RUN cp -a /usr/local/tomcat/webapps.dist/. /usr/local/tomcat/webapps/
+
+EXPOSE 8080

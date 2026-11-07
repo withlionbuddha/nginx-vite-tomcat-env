@@ -5,11 +5,13 @@ services:
     working_dir: /workspace
     volumes:
       - ${FRONTEND_SOURCE_PATH}:/workspace
+      - maven-repository:/root/.m2/repository
     build:
       context: .
-      dockerfile: tomcat/Dockerfile
+      dockerfile: tomcat/Dockerfile.dev
       args:
         TOMCAT_VERSION: ${TOMCAT_VERSION:-10.1-jdk21-temurin}
+	MAVEN_VERSION: ${MAVEN_VERSION:-3.9.11}
     image: tomcat-frontend:${APP_NAME:-earth-power-n4}-dev
     container_name: tomcat-frontend-${APP_NAME:-earth-power-n4}-dev
     ports:
@@ -21,3 +23,6 @@ services:
 networks:
   web-network:
     driver: bridge
+
+volumes:
+  maven-repository:
