@@ -26,7 +26,11 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
+    ports:
+       - "127.0.0.1:6379:6379"
     restart: unless-stopped
+    networks:
+      - web-network
 
 networks:
   web-network:
