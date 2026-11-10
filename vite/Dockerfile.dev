@@ -10,4 +10,4 @@ RUN mkdir -p /opt/vite-fallback \
 
 WORKDIR /workspace/react-web-ui
 
-EXPOSE 8183 8184
+EXPOSE 83 

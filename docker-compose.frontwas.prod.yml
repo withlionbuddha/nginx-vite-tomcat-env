@@ -10,7 +10,7 @@ services:
     image: tomcat-frontend:${APP_NAME:-earth-power-n4}-prod
     container_name: tomcat-frontend-${APP_NAME:-earth-power-n4}-prod
     ports:
-      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PROD_PORT:-18081}:8080"
+      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PROD_PORT:-8080}:8080"
     restart: unless-stopped
     networks:
       - web-network
