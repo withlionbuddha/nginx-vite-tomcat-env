@@ -1,5 +1,5 @@
 ARG NODE_VERSION
-FROM node:${NODE_VERSION}
+FROM node:${NODE_VERSION:-24.20.0-bookworm}
 
 ARG VITE_VERSION
 RUN mkdir -p /opt/vite-fallback \

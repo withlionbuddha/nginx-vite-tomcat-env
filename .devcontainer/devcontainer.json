@@ -5,7 +5,6 @@
   "runServices": [
     "nginx-staticweb",
     "vite-devserver",
-    "ref-vite-devserver",
     "tomcat-frontend"
   ],
   "workspaceFolder": "/workspace",

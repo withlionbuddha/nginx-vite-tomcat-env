@@ -1,8 +1,12 @@
-name: integrated-${APP_NAME}-dev-no-reference
+name: integrated-${APP_NAME}-dev
 
 services:
   nginx-staticweb:
-    image: nginx:1.30.4-alpine3.24
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile.dev
+      additional_contexts:
+        web_ui_source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
     container_name: nginx-staticweb-${APP_NAME}
     ports:
       - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
@@ -23,7 +27,7 @@ services:
     working_dir: /workspace/react-web-ui
     init: true
     ports:
-      - "${VITE_BIND_ADDRESS:-127.0.0.1}:${VITE_PORT:-8183}:8183"
+      - "${VITE_BIND_ADDRESS:-127.0.0.1}:${VITE_PORT:-8183}:83"
     volumes:
       - type: bind
         source: "${WEB_UI_SOURCE_PATH:-../react-web-ui}"
@@ -46,7 +50,7 @@ services:
                exec tail -f /dev/null;
              fi;
              if [ ! -x node_modules/.bin/vite ]; then yarn install; fi &&
-             exec yarn dev --host 0.0.0.0 --port 8183"
+             exec yarn dev --host 0.0.0.0 --port 83"
     networks:
       - web-network
 
@@ -55,16 +59,17 @@ services:
     volumes:
       - ${FRONTEND_SOURCE_PATH}:/workspace
       - maven-repository:/root/.m2/repository
+      - ${FRONTEND_WAR_PATH}:/usr/local/tomcat/webapps
     build:
       context: .
       dockerfile: tomcat/Dockerfile.dev
       args:
-        TOMCAT_VERSION: ${TOMCAT_VERSION:10.1.59-jre21-temurin-noble}
+        TOMCAT_VERSION: ${TOMCAT_VERSION:-10.1.59-jre21-temurin-noble}
         MAVEN_VERSION: ${MAVEN_VERSION:-3.9.11}
     image: tomcat-frontend:${APP_NAME:-earth-power-n4}-dev
     container_name: tomcat-frontend--${APP_NAME:-earth-power-n4}-dev
     ports:
-      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PORT:-8080}:8080"
+      - "${FRONTWAS_BIND_ADDRESS:-127.0.0.1}:${FRONTWAS_PORT:-8181}:81"
     restart: unless-stopped
     networks:
       - web-network
