@@ -4,13 +4,20 @@ services:
   tomcat-frontend:
     working_dir: /workspace
     volumes:
-      - ${FRONTEND_SOURCE_PATH}:/workspace
-      - maven-repository:/root/.m2/repository
+      - type: bind
+        source: ${FRONTEND_SOURCE_PATH}
+        target: /workspace
+      - type: bind 
+        source: ${FRONTEND_SOURCE_WAR_PATH}
+        target: /usr/local/tomcat/webapps
+      - type: volume
+        source: maven-repository
+        target: /root/.m2/repository
     build:
       context: .
       dockerfile: tomcat/Dockerfile.dev
       args:
-        TOMCAT_VERSION: ${TOMCAT_VERSION:10.1.59-jre21-temurin-noble}
+        TOMCAT_VERSION: ${TOMCAT_VERSION:-10.1.59-jre21-temurin-noble}
         MAVEN_VERSION: ${MAVEN_VERSION:-3.9.11}
     image: tomcat-frontend:${APP_NAME:-earth-power-n4}-dev
     container_name: tomcat-frontend-${APP_NAME:-earth-power-n4}-dev
