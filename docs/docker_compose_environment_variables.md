@@ -33,7 +33,7 @@ Image Build(이미지 빌드), Container(컨테이너), Environment Variable(환
 
 | 방법 | 주로 사용하는 시점 | 사용하는 대상 | 변경 후 필요한 작업 |
 |---|---|---|---|
-| `project/.env` | Compose 설정 해석 | `compose.yaml`의 `${VAR}` | Compose 명령 재실행. 결과가 컨테이너 설정이면 재생성, 빌드 인자이면 재빌드 |
+| `DEV_ENV/.env` | Compose 설정 해석 | `compose.yaml`의 `${VAR}` | Compose 명령 재실행. 결과가 컨테이너 설정이면 재생성, 빌드 인자이면 재빌드 |
 | `compose.yml`의 `env_file` | 컨테이너 생성 | 해당 서비스 컨테이너의 환경 | 컨테이너 재생성 |
 | `compose.yml`의 `environment` | 컨테이너 생성 | 해당 서비스 컨테이너의 환경 | 컨테이너 재생성 |
 | `compose.yml`의 `build.args` + Dockerfile `ARG` | 이미지 빌드 | Dockerfile 빌드 단계 | 이미지 재빌드. 컨테이너에 반영하려면 재생성 |
