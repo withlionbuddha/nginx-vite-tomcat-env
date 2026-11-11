@@ -12,7 +12,7 @@ services:
     image: nginx-staticweb:${APP_NAME}-integrated-prod
     container_name: nginx-staticweb-${APP_NAME}
     ports:
-      - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-8080}:80"
+      - "${NGINX_HOST_ADDRESS:-127.0.0.1}:${NGINX_HOST_PORT:-8080}:80"
     depends_on:
       - tomcat-frontend
     restart: unless-stopped

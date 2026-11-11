@@ -26,4 +26,4 @@ RUN java -version && javac -version && mvn -version
 # Remove this step for production if the default applications are not needed.
 RUN cp -a /usr/local/tomcat/webapps.dist/. /usr/local/tomcat/webapps/
 
-EXPOSE 8080
+EXPOSE ${FRONTWAS_CONTAINER_PORT}

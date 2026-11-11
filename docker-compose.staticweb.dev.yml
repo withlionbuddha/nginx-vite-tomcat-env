@@ -5,9 +5,14 @@ services:
     image: nginx:1.30.4-alpine3.24
     container_name: nginx-staticweb-${APP_NAME}
     ports:
-      - "${NGINX_BIND_ADDRESS:-127.0.0.1}:${NGINX_PORT:-80}:80"
+      - "${NGINX_HOST_ADDRESS:-127.0.0.1}:${NGINX_HOST_PORT:-80}:${NGINX_CONTAINER_PORT:-80}"
+      - "${NGINX_HOST_ADDRESS:-127.0.0.1}:${NGINX_HOST_SSL_PORT:-443}:${NGINX_CONTAINER_SSL_PORT:-443}"
     volumes:
       - ./nginx/default.staticweb.dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - type: bind 
+        source: ${SSL_SOURCE_DIR_PATH}
+        target: ${SSL_TARGET_DIR_PATH}
+        read_only: true
     depends_on:
       - vite-devserver
     restart: unless-stopped
