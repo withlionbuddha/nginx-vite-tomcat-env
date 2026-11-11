@@ -78,7 +78,7 @@ Compose가 셸 환경과 `.env` 등의 값을 읽어 Compose 파일의 `${VAR}`�
 보통 Compose 프로젝트 디렉터리의 이름이 정확히 `.env`인 파일을 자동으로 읽습니다. `nginx.env`처럼 이름이 다른 파일은 자동으로 기본 파일이 되지 않습니다.
 
 ```dotenv
-# project/.env
+# DEV_ENV/.env
 APP_NAME=demo
 NGINX_HOST_PORT=8080
 ```
@@ -155,7 +155,7 @@ ARG NGINX_CONFIG=default.env.dev.conf
 COPY nginx/${NGINX_CONFIG} /etc/nginx/templates/default.conf.template
 ```
 
-1. Compose가 `project/.env`에서 `NGINX_CONFIG`를 읽습니다.
+1. Compose가 `DEV_ENV/.env`에서 `NGINX_CONFIG`를 읽습니다.
 2. `compose.yml`에 작성한 `build.args`가 값을 빌드에 전달합니다.
 3. Dockerfile의 `ARG`가 값을 받아 `COPY`에서 사용합니다.
 
@@ -198,7 +198,7 @@ services:
       - ./nginx/nginx.env
 ```
 
-`compose.yml`의 `nginx` 서비스에 `env_file`을 작성하며, 값이 있는 실제 파일은 `project/nginx/nginx.env`입니다. 변수는 **이 `nginx` 서비스의 컨테이너**에 전달됩니다. 다른 서비스에 필요하면 그 서비스에도 설정해야 합니다.
+`compose.yml`의 `nginx` 서비스에 `env_file`을 작성하며, 값이 있는 실제 파일은 `DEV_ENV/nginx/nginx.env`입니다. 변수는 **이 `nginx` 서비스의 컨테이너**에 전달됩니다. 다른 서비스에 필요하면 그 서비스에도 설정해야 합니다.
 
 여러 파일을 나열할 수 있습니다. 같은 이름이 있으면 뒤 파일의 값이 우선합니다.
 
