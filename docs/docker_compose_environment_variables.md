@@ -16,7 +16,7 @@ DEV_ENV/
 다음은 `compose.yml`의 `services` 안에서 `nginx` 서비스에 환경변수 파일을 지정하는 예입니다.
 
 ```yaml
-# project/compose.yml
+# DEV_ENV/compose.yml
 services:
   nginx:
     image: nginx:alpine
@@ -24,7 +24,8 @@ services:
       - ./nginx/nginx.env
 ```
 
-`env_file`은 설정 항목이며, `./nginx/nginx.env`는 읽을 실제 파일의 경로입니다. 이 예에서는 해당 파일의 값이 `nginx` 컨테이너에 전달됩니다. `environment`와 `build.args`도 `compose.yml` 내부의 각 서비스에 작성합니다.
+`env_file`은 설정 항목이며, `./nginx/nginx.env`는 읽을 실제 파일의 경로입니다.  
+이 예에서는 해당 파일의 값이 `nginx` 컨테이너에 전달됩니다. 
 
 ## 적용시점
 
@@ -83,7 +84,7 @@ NGINX_HOST_PORT=8080
 ```
 
 ```yaml
-# project/compose.yml
+# DEV_ENV/compose.yml
 services:
   nginx:
     image: nginx:alpine
@@ -113,7 +114,7 @@ docker compose -f docker-compose.dev.yml config --environment
 ### 2-3. `.env` 값으로 포트와 파일 경로 지정
 
 ```dotenv
-# project/.env
+# DEV_ENV/.env
 SSL_HOST_DIR=F:/project.earth.power/tools/keystore
 NGINX_HOST_SSL_PORT=443
 ```
@@ -134,12 +135,12 @@ services:
 설정 위치: `compose.yml`의 `nginx` 서비스에서 `build.args`를 작성하고 Dockerfile에서 `ARG`를 선언합니다.
 
 ```dotenv
-# project/.env
+# DEV_ENV/.env
 NGINX_CONFIG=default.env.dev.conf
 ```
 
 ```yaml
-# project/compose.yml
+# DEV_ENV/compose.yml
 services:
   nginx:
     build:
@@ -183,7 +184,7 @@ ENV APP_MODE=${APP_MODE}
 ### 4-1. `compose.yml`의 `env_file`
 
 ```dotenv
-# project/nginx/nginx.env
+# DEV_ENV/nginx/nginx.env
 SERVER_NAME=localhost
 TOMCAT_HOST=tomcat-frontend
 TOMCAT_PORT=8080
@@ -212,7 +213,7 @@ env_file:
 Compose에 값을 직접 쓰거나 `.env` 값을 치환해 전달할 수 있습니다.
 
 ```dotenv
-# project/.env
+# DEV_ENV/.env
 NGINX_CONTAINER_PORT=80
 ```
 
@@ -311,7 +312,7 @@ COPY nginx/default.conf /etc/nginx/templates/default.conf.template
 ```
 
 ```dotenv
-# project/nginx/nginx.env
+# DEV_ENV/nginx/nginx.env
 SERVER_NAME=localhost
 ```
 
