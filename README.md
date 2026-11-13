@@ -77,7 +77,7 @@ In the event of any conflict between the Grant of Research Rights under Section 
 > | Configuration | `nginx/default.dev.conf` |
 > | 역할 | 개발 React 화면 프록시 및 `/api/*` 요청을 Tomcat으로 전달 |
 >
-> 개발 구성에서 `/` 요청은 `vite-devserver:8183`으로 전달하고 `/api/*` 요청은 `tomcat-frontend:8080`으로 전달합니다.
+> 개발 구성에서 `/` 요청은 `vite-devserver:83`으로 전달하고 `/api/*` 요청은 `tomcat-frontend:8080`으로 전달합니다.
 
 ### &emsp;1.2. Dev Vite Development Server
 
@@ -163,7 +163,7 @@ tomcat-frontend:
        |       | /             | /api/* +------>|      Backend Services     |
        |       v               |        |       |   service-name:port       |
        |  +-------------------------+   |       +---------------------------+
-       |  | Dev Vite :8183          |   |
+       |  | Dev Vite :83          |   |
        |  +-------------------------+   |
        |                                |
        +--------------------------------+
@@ -172,8 +172,9 @@ tomcat-frontend:
 ### &emsp;2.2. 브라우저 접속 구조
 
 ```text
-http://localhost:8080   -> Nginx -> Dev Vite
-http://localhost:8183   -> Dev Vite 직접 접속
+http://localhost:80   -> Nginx -> Dev Vite
+https://localhost:443   -> Nginx -> Dev Vite
+http://localhost:83   -> Dev Vite 직접 접속
 
 개발 환경:
 http://localhost:8080  -> Tomcat 직접 상태 확인
